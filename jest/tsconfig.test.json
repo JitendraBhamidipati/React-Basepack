@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "types": ["node", "jest"],
+    "typeRoots": ["../node_modules/@types", "../node_modules/@testing-library/jest-dom/types"],
+    "paths": {
+      "@/__mocks__/*": ["../jest/__mocks__/*"],
+      "@/*": ["../src/*"]
+    }
+  },
+  "include": ["../src", "../__tests__", "../jest"]
+}
