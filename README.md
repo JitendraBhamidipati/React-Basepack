@@ -4,14 +4,14 @@ A minimal, production-ready React starter powered by **[Rspack](https://rspack.d
 
 ## Stack
 
-| Tool | Purpose |
-|------|---------|
-| [React 19](https://react.dev) | UI library |
-| [Rspack](https://rspack.dev) | Bundler (Rust, webpack-compatible) |
-| [SWC](https://swc.rs) | Built-in TypeScript/JSX transform |
-| [React Fast Refresh](https://www.npmjs.com/package/react-refresh) | HMR with state preservation |
-| [TypeScript 5](https://www.typescriptlang.org) | Type safety |
-| CSS Modules | Scoped component styles |
+| Tool                                                              | Purpose                            |
+| ----------------------------------------------------------------- | ---------------------------------- |
+| [React 19](https://react.dev)                                     | UI library                         |
+| [Rspack](https://rspack.dev)                                      | Bundler (Rust, webpack-compatible) |
+| [SWC](https://swc.rs)                                             | Built-in TypeScript/JSX transform  |
+| [React Fast Refresh](https://www.npmjs.com/package/react-refresh) | HMR with state preservation        |
+| [TypeScript 5](https://www.typescriptlang.org)                    | Type safety                        |
+| CSS Modules                                                       | Scoped component styles            |
 
 ## Getting Started
 
@@ -76,26 +76,34 @@ parser: { dataUrlCondition: { maxSize: 8 * 1024 } }
 ## Extending
 
 ### SVGR (SVG as React components)
+
 ```bash
 npm install @svgr/webpack -D
 ```
+
 Then add to `rspack.config.mjs`:
+
 ```js
 { test: /\.svg$/i, issuer: /\.[jt]sx?$/, use: ['@svgr/webpack'] }
 ```
 
 ### SCSS / Sass
+
 ```bash
 npm install sass sass-loader -D
 ```
+
 Add rule:
+
 ```js
 { test: /\.s[ac]ss$/, use: ['sass-loader'], type: 'css' }
 ```
 
 ### Tailwind CSS
+
 ```bash
 npm install tailwindcss @tailwindcss/postcss postcss -D
 npx tailwindcss init
 ```
+
 Add `postcss-loader` to your CSS rules and configure `postcss.config.js`.
