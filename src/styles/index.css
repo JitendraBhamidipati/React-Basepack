@@ -7,6 +7,7 @@
   --color-muted: #6b7280;
   --color-border: #e5e7eb;
   --color-code-bg: #f0f2f5;
+  --color-link: #61dafb;
 
   /* Typography */
   --font-sans:
@@ -25,6 +26,7 @@
     --color-muted: #94a3b8;
     --color-border: #2d2d44;
     --color-code-bg: #12121f;
+    --color-link: #93e6fb;
   }
 }
 
@@ -56,12 +58,20 @@ body {
 }
 
 a {
-  color: #61dafb;
+  color: var(--color-link);
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Normalize form element line-height across browsers */
+button,
+input,
+select,
+textarea {
+  line-height: inherit;
 }
 
 img,

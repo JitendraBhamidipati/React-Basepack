@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isCancel } from 'axios';
 import api from '@/lib/axios';
 import * as styles from './PostsPage.module.css';
 
@@ -29,7 +30,7 @@ export default function PostsPage() {
         setPosts(data);
         setStatus('success');
       } catch (err) {
-        if ((err as { name?: string }).name === 'CanceledError') return;
+        if (isCancel(err)) return;
         setError(err instanceof Error ? err.message : 'Something went wrong');
         setStatus('error');
       }

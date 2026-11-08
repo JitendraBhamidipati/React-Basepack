@@ -30,4 +30,10 @@ export const counterSlice = createSlice({
 
 export const { increment, decrement, incrementByAmount, reset } = counterSlice.actions;
 
+// ── Selectors ─────────────────────────────────────────────────────────────────
+// Stable named selectors keep component code clean and are trivial to wrap with
+// createSelector when derived data is needed later.
+import type { RootState } from '@/store/store';
+export const selectCount = (state: RootState) => state.counter.value;
+
 export default counterSlice.reducer;

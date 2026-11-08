@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const isDev = process.env.NODE_ENV !== 'production';
+const isCI = Boolean(process.env.CI);
 
 /** @type {import('@rspack/core').Configuration} */
 export default {
@@ -90,19 +91,35 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(isDev ? 'development' : 'production'),
     }),
     // Fast Refresh — only in dev
+    // ReactRefreshRspackPlugin already enables HMR internally; no need for HotModuleReplacementPlugin
     isDev && new ReactRefreshRspackPlugin(),
-    isDev && new rspack.HotModuleReplacementPlugin(),
-    // Progress indicator
-    new rspack.ProgressPlugin({}),
+    // Progress indicator — suppress in CI where the output is captured as logs
+    !isCI && new rspack.ProgressPlugin({}),
   ].filter(Boolean),
   optimization: {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
+        // Stable React ecosystem — changes rarely, maximises long-term cache hit rate
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router|@remix-run)[\\/]/,
+          name: 'react-vendor',
+          chunks: 'all',
+          priority: 20,
+        },
+        // Redux ecosystem
+        redux: {
+          test: /[\\/]node_modules[\\/](@reduxjs[\\/]toolkit|react-redux|immer|redux)[\\/]/,
+          name: 'redux-vendor',
+          chunks: 'all',
+          priority: 10,
+        },
+        // Everything else in node_modules (axios, etc.)
         vendors: {
-          test: /node_modules/,
+          test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
+          priority: 0,
         },
       },
     },
@@ -114,7 +131,8 @@ export default {
   devServer: {
     port: 3000,
     hot: true,
-    open: true,
+    // open: false — don't auto-open a browser tab; run `open http://localhost:3000` manually
+    open: false,
     historyApiFallback: true,
     compress: true,
     client: {
@@ -127,7 +145,9 @@ export default {
       directory: path.resolve(__dirname, 'public'),
     },
   },
-  devtool: isDev ? 'cheap-module-source-map' : 'source-map',
+  // hidden-source-map: maps are generated (uploadable to error trackers like Sentry)
+  // but NOT referenced in the bundle, so original source is never exposed to end-users.
+  devtool: isDev ? 'cheap-module-source-map' : 'hidden-source-map',
   stats: {
     preset: 'minimal',
   },

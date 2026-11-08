@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { increment, decrement, reset } from '@/store/slices/counterSlice';
+import { increment, decrement, reset, selectCount } from '@/store/slices/counterSlice';
 import * as styles from './HomePage.module.css';
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
-  const count = useAppSelector((state) => state.counter.value);
+  const count = useAppSelector(selectCount);
 
   return (
     <div className={styles.page}>

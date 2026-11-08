@@ -22,9 +22,9 @@ const config = {
   },
 
   // react-router v8 ships ESM only — allow it to be transformed by SWC.
-  // The greedy lookahead works for both flat node_modules and pnpm's virtual
+  // Anchored lookahead works for both flat node_modules and pnpm's virtual
   // store (.pnpm/<hash>/node_modules/<pkg>/).
-  transformIgnorePatterns: ['/node_modules/(?!.*(react-router|@remix-run))'],
+  transformIgnorePatterns: ['/node_modules/(?!(react-router|@remix-run))'],
 
   // CSS Modules → identity-obj-proxy, static assets → simple string stub
   moduleNameMapper: {
@@ -43,9 +43,22 @@ const config = {
   testMatch: ['<rootDir>/__tests__/**/*.{ts,tsx}'],
 
   // Coverage
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/main.tsx', '!src/**/*.d.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/main.tsx', // bootstrap only, nothing to test
+    '!src/App.tsx', // 2-line re-export
+    '!src/router/index.tsx', // pure wiring
+    '!src/store/store.ts', // pure wiring
+    '!src/**/*.d.ts',
+  ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
+  coverageThreshold: {
+    global: {
+      lines: 80,
+      functions: 80,
+    },
+  },
 };
 
 export default config;
